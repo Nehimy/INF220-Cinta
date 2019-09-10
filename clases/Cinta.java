@@ -1,6 +1,7 @@
 package clases;
 
 import java.util.Scanner;
+import java.util.regex.*;
 
 //Declaramos la clase
 public class Cinta{
@@ -23,29 +24,34 @@ public class Cinta{
   /*Metodos de la clase cinta*/
   /////////////////////////////
   public boolean Pertenece(char caracter){
+    String auxCadena = Character.toString(caracter);
+    return auxCadena.matches("[A-Za-z]");
+    /*int i = 0;
     char [] conjuntoDeCaracteres = {'a','b','c','e','i','o','u'};
-    while(i <= conjuntoDeCaracteres.length){
+    
+    while(i <= conjuntoDeCaracteres.length-1){
       if(caracter == conjuntoDeCaracteres[i]){
         i = conjuntoDeCaracteres.length;
         return true;
       }else{
         return false;
       }
-      i++;
+      i=i+1;
     }
+    return true;*/
   }
   
   //Inserta un caracter en la cinta
   public void Grabar(char caracter){
     if(pausa){
-      if (!(Pertenece(caracter))){
-        System.out.println("Error: Caracter invalido");
-        //Generally indicates unsuccessful termination.
-        System.exit(1);
-      }else{
+      if ((Pertenece(caracter))){
         Avanzar();
         caractercito[cabezal] = caracter;
         System.out.println(caractercito[cabezal]);
+      }else{
+        System.out.println("Error: Caracter invalido");
+        //Generally indicates unsuccessful termination.
+        //System.exit(1);
       }
     }
   }
@@ -53,7 +59,12 @@ public class Cinta{
   //Devuelve el caracter donde esta el cabezal
   //Nombre alternativo Play
   public char SacarCaracter(){
-    return caractercito[cabezal];
+    if (cabezal < 0){
+      return 0;
+    }else{
+      return caractercito[cabezal];
+    }
+    
   }
   
   //Avanzar el cabezal a la siguiente position 
@@ -92,10 +103,11 @@ public class Cinta{
   
   //Mueve el cabezal hasta la siguiente position en blanco
   public void Siguiente(){
-    if(cabezal >= EOC-1){
-      Avanzar();
+    if(pausa && cabezal < (SacarTodo().length()/2)-1){
+      cabezal++;
     }
-
+    System.out.println(Integer.toString(SacarTodo().length()/2));
+    System.out.println(Integer.toString(cabezal));
   }
   
   //Mueve el cabezal a la position anterior en blanco

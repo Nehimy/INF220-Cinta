@@ -1,8 +1,8 @@
-#Proyecto Cinta para Estructura de Datos I
+# Proyecto Cinta para Estructura de Datos I
 
 Este proyecto es una emulacion del funcionamiento de una cinta de cassette (no precisa), que nos pidió el **Ing. Campos** en Esctructura de Datos I (UAGRM 2019 Sem 2). Solo es una prueba de concepto para aplicar lo llevado hasta ahora (9 sep. 219).
 
-#Como usar
+# Como usar
 
 **En GNU/Linux:**
 

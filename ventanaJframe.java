@@ -2,6 +2,8 @@
   Enlaces de referencia:
     - https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
     - https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
+    - https://javatutorial.net/java-swing-jframe-layouts
+    - https://howtodoinjava.com/java-regular-expression-tutorials/
 */
 
 import clases.Cinta;
@@ -22,6 +24,8 @@ public class ventanaJframe {
     private JButton botonPlay;
     private JButton botonAnterior;
     private JButton botonSiguiente;
+    private JButton botonDetener;
+    private JButton botonReiniciar;
     private JTextField texto1;
     private JTextField texto2;
     private JLabel labelCinta;
@@ -36,9 +40,9 @@ public class ventanaJframe {
     
       //Variablede tipo JFrame    
       ventanaM = new JFrame("ventanita");
-      ventanaM.setSize(400,400);
+      ventanaM.setSize(550,550);
       ventanaM.getContentPane().setBackground(Color.white);
-      ventanaM.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);/*Finaliza el programa con click en la X*/
+      ventanaM.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);/*Finaliza el programa*/
       ventanaM.setLayout(new GridBagLayout());  
         
       //Declaramos el botón grabar Rec
@@ -50,14 +54,20 @@ public class ventanaJframe {
       botonPlay.setBackground(Color.pink);
       
       //Declaramos el botón anterior «
-      JButton botonAnterior = new JButton("«");
+      JButton botonAnterior = new JButton(" « ");
       botonAnterior.setBackground(Color.pink);
       
       //Declaramos el botón siguiente »
-      JButton botonSiguiente = new JButton("»");
+      JButton botonSiguiente = new JButton(" » ");
       botonSiguiente.setBackground(Color.pink);
       
+      //Declaramos el botón detener ||
+      JButton botonDetener = new JButton(" || ");
+      botonDetener.setBackground(Color.pink); 
       
+      //Declaramos el botón reiniciar ▀
+      JButton botonReiniciar = new JButton(" ▀ ");
+      botonReiniciar.setBackground(Color.pink);
       
       /*     
       //Declarando caja de texto1
@@ -73,7 +83,7 @@ public class ventanaJframe {
       //Crea el objeto JLabel
       labelCinta = new JLabel(" ");
       labelCinta.setFont(new Font("Arial", 0, 18));
-      Border borde = BorderFactory.createLineBorder(Color.BLUE, 1);
+      Border borde = BorderFactory.createLineBorder(Color.pink, 2);
       labelCinta.setBorder(borde);
       
       labelCabezal = new JLabel(" ");
@@ -87,21 +97,25 @@ public class ventanaJframe {
       /* Adherir elementos a la ventana*/
       /*-------------------------------*/
       
-      //ayadir labels a la ventana
-      gridConf.gridx = 0;
+      //Añadir labels a la ventana
+      //gridConf.gridx = 0;
+      //gridConf.gridy = 0;
+      gridConf.gridx = 2;
       gridConf.gridy = 0;
-      gridConf.ipady = 0;
-      gridConf.ipadx = 0;
+      gridConf.ipady = 20;
+      gridConf.ipadx = 15;
       gridConf.insets = new Insets(0,0,0,0); //padding
       gridConf.gridwidth = 2;
       ventanaM.add(labelCinta, gridConf);
       
-      gridConf.gridx = 0;
+      //gridConf.gridx = 0;
+      //gridConf.gridy = 1;
+      gridConf.gridx = 2;
       gridConf.gridy = 1;
       gridConf.insets = new Insets(0,0,0,0);
       ventanaM.add(labelCabezal, gridConf);
       
-      // Confi de los botones
+      //Confi de los botones
       gridConf.ipady = 20;
       gridConf.ipadx = 20;
       gridConf.gridwidth = 1;
@@ -129,6 +143,10 @@ public class ventanaJframe {
       ventanaM.add(botonAnterior, gridConf);
       gridConf.gridx = 3;
       ventanaM.add(botonSiguiente, gridConf);
+      gridConf.gridx = 4;
+      ventanaM.add(botonDetener, gridConf);
+      gridConf.gridx = 5;
+      ventanaM.add(botonReiniciar, gridConf);
       
       
         
@@ -147,7 +165,7 @@ public class ventanaJframe {
       });    
       
       //onclick  Anterior «
-      botonSiguiente.addActionListener(new ActionListener(){
+      botonAnterior.addActionListener(new ActionListener(){
           public void actionPerformed(ActionEvent e){
             anteriorClick();
           }
@@ -160,7 +178,19 @@ public class ventanaJframe {
           }
       });
       
+      //onclick Detener ||
+      botonDetener.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+          detenerClick();
+        }
+      });
       
+      //onclick Reiniciar  ▀
+      botonReiniciar.addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+          reiniciarClick();
+        }
+      });
       
       /*------------------------*/
       //ventanaM.pack();
@@ -186,24 +216,39 @@ public class ventanaJframe {
     public void anteriorClick(){
       objCinta.Anterior();
       System.out.println("retrocedio un poquito");
+      dibujarCabezalyCinta();
     }
     
     public void siguienteClick(){
-      objCinta.Avanzar();   
+      objCinta.Siguiente();   
       System.out.println("Avanzo un poquito"); 
+      dibujarCabezalyCinta();
+    }
+    
+    public void detenerClick(){
+      objCinta.Detener();
+    }
+    
+    public void reiniciarClick(){
+      objCinta.Reiniciar();
+      System.out.println("cabezal en -1"); 
+      dibujarCabezalyCinta();
     }
     
     public void dibujarCabezalyCinta(){
-      String cintaText = objCinta.SacarTodo();
-      
-      if (cintaText != ""){
-        int lastIndex = objCinta.cabezal * 2;
-        System.out.println(Integer.toString(lastIndex));
-        String cabezalText = cintaText.substring(0,lastIndex);
-        cabezalText = "<html><font color='white'>"+cabezalText+"</font>\u2b06\ufe0f</html>";
-        labelCabezal.setText(cabezalText);
+      if (objCinta.cabezal > -1){
+        String cintaText = objCinta.SacarTodo();
+        
+        if (cintaText != ""){
+          int lastIndex = objCinta.cabezal * 2;
+          String cabezalText = cintaText.substring(0,lastIndex);
+          cabezalText = "<html><font color='white'>"+cabezalText+"</font>\u2b06\ufe0f</html>";
+          labelCabezal.setText(cabezalText);
+        }
+        
+        labelCinta.setText(cintaText);
+      } else {
+        labelCabezal.setText("");
       }
-      
-      labelCinta.setText(cintaText);
     }
 }
